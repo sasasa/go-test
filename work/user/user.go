@@ -9,12 +9,15 @@ import(
 
 type encodable interface{
 	Encode() (string, error)
+	hoge() string
 }
 type User struct {
 	Id int
 	Name string
 	Email string
 	Created time.Time
+
+	// encodable
 }
 
 func (user *User) Encode() (string, error) {
@@ -22,6 +25,10 @@ func (user *User) Encode() (string, error) {
 		bs, err := json.Marshal(user)
 		return string(bs), err
 }
+func (user *User) hoge() string {
+	return "hoge"
+}
+
 
 func NewUser(dict Dict) (encodable) {
 	/* User 構造 体 の 初期化 */
