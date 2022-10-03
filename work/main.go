@@ -6,9 +6,10 @@ import(
 	"fmt"
 	"os"
 	"log"
-	"time"
+	// "time"
 	"flag"
 	"local.packages/user"
+	"github.com/tlorens/go-ibgetkey"
 	. "local.packages/utility"
 )
 
@@ -56,9 +57,21 @@ func main() {
 	fmt.Println("Test start")
 	fmt.Println("Create goroutine")
 	quit := make(chan bool)
-	go appleGoroutine("Apple", 10, quit)
+	counter := make(chan int)
+	go appleGoroutine("Apple", 10, quit, counter)
 	fmt.Println("Waiting for the goroutine to complete")
-	isEnd := <-quit
+	
+	var c int
+	var isEnd bool
+	loop:
+	for {
+			select {
+				case isEnd = <-quit:
+						break loop
+				case c = <-counter:
+					fmt.Println(c)
+			}
+	}
 	fmt.Println(fmt.Sprintf("Test compleated  --- %t ---", isEnd))
 
 	var ( 
@@ -78,9 +91,23 @@ func main() {
 
 }
 
-func appleGoroutine(fruit string, a int, quit chan bool) {
+func appleGoroutine(fruit string, a int, quit chan bool, counter chan int) {
 	fmt.Printf("Start goroutine - %s %d\n", fruit, a)
-	time.Sleep(3 * time.Second)
+	for i:=1; i<=a; i++ {
+		counter <- i
+	}
+	targetkey := "."
+	t := int(targetkey[0])
+	loop:
+	for {
+		input := keyboard.ReadKey()
+		fmt.Println(input)
+		if input == t {
+			quit <- true
+			break loop
+		}
+	}
+	// time.Sleep(1 * time.Second)
 	fmt.Println("End goroutine")
-	quit <- true
+
 }
