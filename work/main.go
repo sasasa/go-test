@@ -58,8 +58,8 @@ func main() {
 	quit := make(chan bool)
 	go appleGoroutine("Apple", 10, quit)
 	fmt.Println("Waiting for the goroutine to complete")
-	<-quit
-	fmt.Println("Test compleated")
+	isEnd := <-quit
+	fmt.Println(fmt.Sprintf("Test compleated  --- %t ---", isEnd))
 
 	var ( 
 		max int 
