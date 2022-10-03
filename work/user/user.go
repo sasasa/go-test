@@ -6,15 +6,15 @@ import(
 	. "local.packages/utility"
 )
 
+
+type encodable interface{
+	Encode() (string, error)
+}
 type User struct {
 	Id int
 	Name string
 	Email string
 	Created time.Time
-}
-
-type encodable interface{
-	Encode()
 }
 
 func (user *User) Encode() (string, error) {
@@ -23,7 +23,7 @@ func (user *User) Encode() (string, error) {
 		return string(bs), err
 }
 
-func NewUser(dict Dict) (*User) {
+func NewUser(dict Dict) (encodable) {
 	/* User 構造 体 の 初期化 */
 	u := new(User)
 	u.Id = dict["Id"].(int)
