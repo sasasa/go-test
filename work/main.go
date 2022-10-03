@@ -30,7 +30,7 @@ func main() {
 	/* JSON エン コード */
 	bs, err := json.Marshal(user)
 	if err != nil {
-		log. Fatal( err)
+		log.Fatal(err)
 	} else {
 		fmt.Println(string(bs)) 
 	}
