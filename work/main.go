@@ -8,8 +8,8 @@ import(
 	"log"
 	"time"
 	"flag"
-	"encoding/json"
 	"local.packages/user"
+	. "local.packages/utility"
 )
 
 type MyError struct {
@@ -26,13 +26,16 @@ func fn() (int, error) { // *MyErrorではなくerror
 }
 
 func main() {
-	user := user.NewUser()
-	/* JSON エン コード */
-	bs, err := json.Marshal(user)
+	u := user.NewUser(Dict{
+		"Id": 1,
+		"Name": "山田 太郎",
+		"Email": "yamada@example.com",
+	})
+	encodedUser, err := u.Encode()
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		fmt.Println(string(bs)) 
+		fmt.Println(encodedUser)
 	}
 
 	p, err := os.Getwd()

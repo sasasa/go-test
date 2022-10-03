@@ -2,6 +2,8 @@ package user
 
 import(
 	"time"
+	"encoding/json"
+	. "local.packages/utility"
 )
 
 type User struct {
@@ -11,12 +13,22 @@ type User struct {
 	Created time.Time
 }
 
-func NewUser() (*User) {
+type encodable interface{
+	Encode()
+}
+
+func (user *User) Encode() (string, error) {
+		/* JSON エン コード */
+		bs, err := json.Marshal(user)
+		return string(bs), err
+}
+
+func NewUser(dict Dict) (*User) {
 	/* User 構造 体 の 初期化 */
 	u := new(User)
-	u.Id = 1
-	u.Name = "山田 太郎"
-	u.Email = "yamada@example.com"
+	u.Id = dict["Id"].(int)
+	u.Name = dict["Name"].(string)
+	u.Email = dict["Email"].(string)
 	u.Created = time.Now()
 	return u
 }
